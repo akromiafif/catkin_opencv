@@ -21,9 +21,7 @@ namespace aksan_percept {
 
   // Topics
   static const std::string IMAGE_TOPIC = "/camera/image";
-
   
-
 
   class AksanPercept {
     public: 
@@ -34,7 +32,6 @@ namespace aksan_percept {
 
       // Save video variable
       cv::VideoWriter writer;
-      
       
 
     public:
