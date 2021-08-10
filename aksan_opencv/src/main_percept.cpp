@@ -7,6 +7,5 @@ int main(int argc, char** argv) {
   aksan_percept::AksanPercept uavCapture(&uav_percept_node);
 
   ros::spin();
-
 	return 0;
 }

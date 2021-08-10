@@ -3,11 +3,11 @@
 #include <opencv2/highgui/highgui.hpp> 
 #include <cv_bridge/cv_bridge.h>
 #include <sstream>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
 #include <string>
-
 
 using namespace std;
 using namespace cv;
@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
   image_transport::Publisher itPublisher = it.advertise("camera/image", 1);
   sensor_msgs::ImagePtr msg;
 
-  cv::VideoCapture capture(4); 
+  cv::VideoCapture capture(0); 
 
 
   double fps = capture.get( cv::CAP_PROP_FPS );
@@ -35,23 +35,21 @@ int main(int argc, char** argv) {
   cv::VideoWriter writer;
   writer.open("output.avi", VideoWriter::fourcc('M','J','P','G'), fps, size);
   cv::Mat frame; 
+  ros::Rate rate(30);
 
   while (nh.ok()) {
     capture >> frame; 
 
-    if (!frame.empty()) {
-      imshow("Video Original", frame);
-      writer << frame;
+    imshow("Video Original", frame);
+    writer << frame;
 
-      // Save image frame by frame
-      cv::imwrite("romi" + std::to_string(rand()) + ".jpg", frame);
+    // Save image frame by frame
+    // cv::imwrite("romi" + std::to_string(rand()) + ".jpg", frame);
 
-      msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", frame).toImageMsg();
-      itPublisher.publish(msg);
-      cv::waitKey(1);
-    }
-
-    ros::Rate rate(30);
+    msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", frame).toImageMsg();
+    itPublisher.publish(msg);
+    cv::waitKey(1);
+    
     ros::spinOnce();
     rate.sleep();
   }

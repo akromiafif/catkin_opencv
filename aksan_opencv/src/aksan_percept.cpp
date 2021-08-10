@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include "aksan_percept.hpp"
+#include <aksan_percept.hpp>
 
 using namespace std;
 using namespace cv;
@@ -22,24 +22,21 @@ namespace aksan_percept {
 
     myfile.open ("latlong.txt");
 
-    // //Image subscriber to "camera/image" topic
-    itSubscriber = it.subscribe("camera/image", 1000, &AksanPercept::improCB, this); 
-
+    //Image subscriber to "camera/image" topic
+    itSubscriber = it.subscribe("camera/image", 1, &AksanPercept::improCB, this); 
   }
 
   AksanPercept::~AksanPercept() {}
 
   void AksanPercept::improCB(const sensor_msgs::ImageConstPtr& msg) {
-    try {
-      Rate rate(30.0); //Transmission rate of imagery
-      
+    try {      
       //Convert image from msg to BGR format
       Mat BGR = cv_bridge::toCvShare(msg, "bgr8")->image; 
       //Make copy of image for processing
       Mat orig_image = BGR.clone(); 
       
       //Introduce blur for image flitering and converting
-      medianBlur(BGR, BGR, 3); 
+      medianBlur(BGR, BGR, 7); 
       
       // Convert input image to HSV
       Mat HSV;
@@ -69,32 +66,30 @@ namespace aksan_percept {
 
       //HOUGH CIRCLE TRANSFORNATION
       HoughCircles(hue_image, circles, CV_HOUGH_GRADIENT, 1, hue_image.rows/8, 100, 25, 0, 0); 
-      imshow("Original", orig_image);
-      
+      //imshow("Original", orig_image);
+
+      // Highlight detected object
+      for(size_t cur = 0; cur < circles.size(); ++cur) {
+        
+        //Define centre point of detected circle
+        Point center(circles[cur][0], circles[cur][1]);
+
+        //Define radius of detected circle
+        int radius = circles[cur][2]; 
+        
+        //Overlay detected cricle outline onto origional image
+        circle(orig_image, center, radius, Scalar(239, 152, 38), 2); 
+        
+        //Display circle image overlay
+        cv::imshow("Vision Output", orig_image);
+
+        cv::imwrite("romi" + std::to_string(rand()) + ".jpg", orig_image);
+
+        //allow for display of image for given milliseconds (Image overlay refreshrate)
+        waitKey(10);  
+      }
 
       if (circles.size() != 0) {
-
-        // Highlight detected object
-        for(size_t cur = 0; cur < circles.size(); ++cur) {
-          
-          //Define centre point of detected circle
-          Point center(circles[cur][0], circles[cur][1]);
-
-          //Define radius of detected circle
-          int radius = circles[cur][2]; 
-          
-          //Overlay detected cricle outline onto origional image
-          circle(orig_image, center, radius, Scalar(239, 152, 38), 2); 
-          
-          //Display circle image overlay
-          cv::imshow("Vision Output", orig_image);
-
-          cv::imwrite("romi" + std::to_string(rand()) + ".jpg", orig_image);
-
-          //allow for display of image for given milliseconds (Image overlay refreshrate)
-          waitKey(30);  
-        }
-
         if (myfile.is_open()) {
           myfile << "Hello World from OpenCV \n";
           // myfile << "LatRef: " + std::to_string(latRef) + " | LongRef: " + std::to_string(longRef) + " \n";
