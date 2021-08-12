@@ -23,16 +23,12 @@ namespace aksan_percept {
 
     // VARIABLE BUAT SIMPEN VIDEO
     cv::Size size(
-      (int) 640,
-      (int) 360
+      (int) 176,
+      (int) 144
     );
 
     writer.open("vision_detected.avi", VideoWriter::fourcc('M','J','P','G'), 30, size);
     // VARIABLE BUAT SIMPEN VIDEO
-
-    // VARIABLE BUAT SIMPEN Lat Long
-    myfile.open ("latlong.txt");
-    // VARIABLE BUAT SIMPEN Lat Long
 
     //Image subscriber to "camera/image" topic
     itSubscriber = it.subscribe(IMAGE_TOPIC, 1, &AksanPercept::improCB, this); 
@@ -102,28 +98,15 @@ namespace aksan_percept {
         //Overlay detected cricle outline onto origional image
         circle(orig_image, center, radius, Scalar(239, 152, 38), 2); 
         
-        // DISABLE KALO MODE FLIGHT
-        cv::imshow(OPENCV_WINDOW, orig_image);
-        // DISABLE KALO MODE FLIGHT
-        
         //allow for display of image for given milliseconds (Image overlay refreshrate)
         waitKey(10);  
       }
 
-      if (circles.size() != 0) {
-        if (myfile.is_open()) {
-          myfile << "Hello World from OpenCV \n";
-          // myfile << "LatRef: " + std::to_string(latRef) + " | LongRef: " + std::to_string(longRef) + " \n";
+      // DISABLE KALO MODE FLIGHT
+      cv::imshow(OPENCV_WINDOW, orig_image);
+      // DISABLE KALO MODE FLIGHT
 
-          myfile.close();
-        }
-
-        writer << orig_image;
-      }
-
-      // Define image size
-      // ROS_INFO("Size: (W) %i x (H) %i", orig_image.cols, orig_image.rows);
-
+      writer << orig_image;
     } catch (cv_bridge::Exception& e) {
       ROS_ERROR("cv_bridge exception: %s", e.what());
       return;

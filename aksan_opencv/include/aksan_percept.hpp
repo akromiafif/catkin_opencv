@@ -27,9 +27,6 @@ namespace aksan_percept {
     public: 
       image_transport::Subscriber itSubscriber;
 
-      // Save Lat Long variable
-      std::ofstream myfile;
-
       // Save video variable
       cv::VideoWriter writer;
       
