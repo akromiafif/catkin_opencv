@@ -23,8 +23,8 @@ namespace aksan_percept {
 
     // VARIABLE BUAT SIMPEN VIDEO
     cv::Size size(
-      (int) 176,
-      (int) 144
+      (int) 640,
+      (int) 360
     );
 
     writer.open("vision_detected.avi", VideoWriter::fourcc('M','J','P','G'), 30, size);
@@ -84,8 +84,12 @@ namespace aksan_percept {
       vector<Vec3f> circles;
 
       //HOUGH CIRCLE TRANSFORNATION
-      cv::HoughCircles(hue_image, circles, CV_HOUGH_GRADIENT, 1, hue_image.rows/8, 100, 25, 0, 0); 
+      cv::HoughCircles(hue_image, circles, CV_HOUGH_GRADIENT, 1, hue_image.rows/16, 100, 25, 1, 100); 
       //imshow("Original", orig_image);
+
+      if (circles.size() != 0) {
+        ROS_INFO("Red Circle Detected");
+      }
 
       // Highlight detected object
       for(size_t cur = 0; cur < circles.size(); ++cur) {
@@ -107,6 +111,8 @@ namespace aksan_percept {
       // DISABLE KALO MODE FLIGHT
 
       writer << orig_image;
+
+
     } catch (cv_bridge::Exception& e) {
       ROS_ERROR("cv_bridge exception: %s", e.what());
       return;
