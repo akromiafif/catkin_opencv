@@ -24,7 +24,7 @@ int main(int argc, char** argv) {
   ros::NodeHandle node;
   image_transport::ImageTransport it(node); 
   image_transport::Publisher itPublisher = it.advertise(IMAGE_TOPIC, 1);
-  cv::VideoCapture capture(4, cv::CAP_V4L2);
+  cv::VideoCapture capture(0, cv::CAP_V4L2);
 
   capture.set(cv::CAP_PROP_FRAME_WIDTH, 640);
   capture.set(cv::CAP_PROP_FRAME_HEIGHT, 360);
@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
     capture >> frame; 
 
     // DISABLE KALO MODE FLIGHT
-    imshow(OPENCV_WINDOW, frame);
+    // imshow(OPENCV_WINDOW, frame);
     writer << frame;
     // DISABLE KALO MODE FLIGHT
 

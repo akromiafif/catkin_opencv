@@ -84,7 +84,7 @@ namespace aksan_percept {
       vector<Vec3f> circles;
 
       //HOUGH CIRCLE TRANSFORNATION
-      cv::HoughCircles(hue_image, circles, CV_HOUGH_GRADIENT, 1, hue_image.rows/16, 100, 25, 1, 100); 
+      cv::HoughCircles(hue_image, circles, CV_HOUGH_GRADIENT, 1, hue_image.rows/4, 100, 25, 1, 100); 
       //imshow("Original", orig_image);
 
       if (circles.size() != 0) {
@@ -107,7 +107,7 @@ namespace aksan_percept {
       }
 
       // DISABLE KALO MODE FLIGHT
-      cv::imshow(OPENCV_WINDOW, orig_image);
+      // cv::imshow(OPENCV_WINDOW, orig_image);
       // DISABLE KALO MODE FLIGHT
 
       writer << orig_image;
