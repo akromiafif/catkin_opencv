@@ -12,10 +12,10 @@ namespace enc = sensor_msgs::image_encodings;
 
 namespace aksan_percept {
   AksanPercept::AksanPercept(ros::NodeHandle* node) {
-    //Create viewable window - Image overlay output
     cv::namedWindow(OPENCV_WINDOW, WINDOW_AUTOSIZE);
 
-    //Begin window view and image display
+    // cv::namedWindow("Pink Hue", WINDOW_AUTOSIZE);
+
     cv::startWindowThread(); 
 
     //Define source of image
@@ -58,34 +58,39 @@ namespace aksan_percept {
 
       //Convert BGR image to HSV image
       cv::cvtColor(BGR, HSV, COLOR_BGR2HSV); 
-      
+
+      vector<Vec3f> circles;
+
+      // CUSTOM FOR RED RANGE //
       // Threshold the HSV image, keep only the red pixels
       Mat lower_hue;
       Mat upper_hue;
-      
+
       //Lower hue threshold range
       inRange(HSV, Scalar(0, 100, 100), Scalar(10, 255, 255), lower_hue); 
       
       //Upper hue threshold range
       inRange(HSV, Scalar(165, 100, 100), Scalar(179, 255, 255), upper_hue); 
       
-      // Combine the above two images
       Mat hue_image;
       
-      //Combine hue images for object recognition
       cv::addWeighted(lower_hue, 1.0, upper_hue, 1.0, 0.0, hue_image); 
       
-      //Introduce interference
-      //Introduce noise
       cv::GaussianBlur(hue_image, hue_image, Size(9, 9), 2, 2); 
       
-      //Hough transform to detect circles
-      //Detected circles array
-      vector<Vec3f> circles;
-
-      //HOUGH CIRCLE TRANSFORNATION
       cv::HoughCircles(hue_image, circles, CV_HOUGH_GRADIENT, 1, hue_image.rows/4, 100, 25, 1, 100); 
-      //imshow("Original", orig_image);
+      // CUSTOM FOR RED RANGE //
+
+
+      // ============== CUSTOM FOR PINK RANGE ============== //
+      Mat lower_pink;
+
+      cv::inRange(HSV, cv::Scalar(140, 50, 0), cv::Scalar(160, 255, 255), lower_pink);
+
+      cv::GaussianBlur(lower_pink, lower_pink, Size(9, 9), 2, 2);
+
+      cv::HoughCircles(lower_pink, circles, CV_HOUGH_GRADIENT, 1, lower_pink.rows/4, 100, 25, 50, 100); 
+      // ============== CUSTOM FOR PINK RANGE ============== //
 
       if (circles.size() != 0) {
         ROS_INFO("Red Circle Detected");
@@ -107,16 +112,15 @@ namespace aksan_percept {
       }
 
       // DISABLE KALO MODE FLIGHT
-      // cv::imshow(OPENCV_WINDOW, orig_image);
+      cv::imshow(OPENCV_WINDOW, orig_image);
+      cv::imshow("Red Hue", hue_image);
+      cv::imshow("Pink Hue", lower_pink);
       // DISABLE KALO MODE FLIGHT
 
       writer << orig_image;
-
-
     } catch (cv_bridge::Exception& e) {
       ROS_ERROR("cv_bridge exception: %s", e.what());
       return;
     }
   }
 }
-
