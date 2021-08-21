@@ -76,7 +76,7 @@ namespace aksan_percept {
       
       cv::GaussianBlur(hue_image, hue_image, Size(9, 9), 2, 2); 
       
-      cv::HoughCircles(hue_image, circles, CV_HOUGH_GRADIENT, 1, hue_image.rows/4, 100, 25, 1, 100); 
+      cv::HoughCircles(hue_image, circles, CV_HOUGH_GRADIENT, 1, hue_image.rows/4, 100, 25, 25, 100); 
       // CUSTOM FOR RED RANGE //
 
 
@@ -87,7 +87,7 @@ namespace aksan_percept {
 
       cv::GaussianBlur(lower_pink, lower_pink, Size(9, 9), 2, 2);
 
-      cv::HoughCircles(lower_pink, circles, CV_HOUGH_GRADIENT, 1, lower_pink.rows/4, 100, 25, 50, 100); 
+      cv::HoughCircles(lower_pink, circles, CV_HOUGH_GRADIENT, 1, lower_pink.rows/4, 100, 25, 25, 100); 
       // ============== CUSTOM FOR PINK RANGE ============== //
 
       if (circles.size() != 0) {
@@ -110,9 +110,9 @@ namespace aksan_percept {
       }
 
       // DISABLE KALO MODE FLIGHT
-      // cv::imshow(OPENCV_WINDOW, orig_image);
-      // cv::imshow("Red Hue", hue_image);
-      // cv::imshow("Pink Hue", lower_pink);
+      cv::imshow(OPENCV_WINDOW, orig_image);
+      cv::imshow("Red Hue", hue_image);
+      cv::imshow("Pink Hue", lower_pink);
       // DISABLE KALO MODE FLIGHT
 
       writer << orig_image;
