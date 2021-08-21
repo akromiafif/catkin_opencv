@@ -14,8 +14,6 @@ namespace aksan_percept {
   AksanPercept::AksanPercept(ros::NodeHandle* node) {
     cv::namedWindow(OPENCV_WINDOW, WINDOW_AUTOSIZE);
 
-    // cv::namedWindow("Pink Hue", WINDOW_AUTOSIZE);
-
     cv::startWindowThread(); 
 
     //Define source of image
@@ -85,7 +83,7 @@ namespace aksan_percept {
       // ============== CUSTOM FOR PINK RANGE ============== //
       Mat lower_pink;
 
-      cv::inRange(HSV, cv::Scalar(140, 50, 0), cv::Scalar(160, 255, 255), lower_pink);
+      cv::inRange(HSV, cv::Scalar(135, 40, 160), cv::Scalar(160, 255, 255), lower_pink);
 
       cv::GaussianBlur(lower_pink, lower_pink, Size(9, 9), 2, 2);
 
@@ -112,9 +110,9 @@ namespace aksan_percept {
       }
 
       // DISABLE KALO MODE FLIGHT
-      cv::imshow(OPENCV_WINDOW, orig_image);
-      cv::imshow("Red Hue", hue_image);
-      cv::imshow("Pink Hue", lower_pink);
+      // cv::imshow(OPENCV_WINDOW, orig_image);
+      // cv::imshow("Red Hue", hue_image);
+      // cv::imshow("Pink Hue", lower_pink);
       // DISABLE KALO MODE FLIGHT
 
       writer << orig_image;
