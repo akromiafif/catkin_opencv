@@ -3,13 +3,13 @@
     pkg="aksan_opencv"
     type="aksan_capture"
     name="aksan_capture"
-    output="log"
+    output="screen"
   />
 
   <node
     pkg="aksan_opencv"
     type="main_percept"
     name="main_percept"
-    output="log"
+    output="screen"
   />
 </launch> 

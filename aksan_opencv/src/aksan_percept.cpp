@@ -65,10 +65,10 @@ namespace aksan_percept {
       Mat upper_hue;
 
       //Lower hue threshold range
-      inRange(HSV, Scalar(0, 100, 100), Scalar(10, 255, 255), lower_hue); 
+      inRange(HSV, Scalar(0, 170, 160), Scalar(10, 255, 255), lower_hue); 
       
       //Upper hue threshold range
-      inRange(HSV, Scalar(165, 100, 100), Scalar(179, 255, 255), upper_hue); 
+      inRange(HSV, Scalar(165, 100, 100), Scalar(180, 255, 255), upper_hue); 
       
       Mat hue_image;
       
@@ -104,15 +104,15 @@ namespace aksan_percept {
         
         //Overlay detected cricle outline onto origional image
         circle(orig_image, center, radius, Scalar(239, 152, 38), 2); 
-        
+
         //allow for display of image for given milliseconds (Image overlay refreshrate)
         waitKey(10);  
       }
 
       // DISABLE KALO MODE FLIGHT
-      cv::imshow(OPENCV_WINDOW, orig_image);
-      cv::imshow("Red Hue", hue_image);
-      cv::imshow("Pink Hue", lower_pink);
+      // cv::imshow(OPENCV_WINDOW, orig_image);
+      // cv::imshow("Red Hue", hue_image);
+      // cv::imshow("Pink Hue", lower_pink);
       // DISABLE KALO MODE FLIGHT
 
       writer << orig_image;
