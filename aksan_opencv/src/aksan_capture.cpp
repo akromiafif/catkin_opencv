@@ -24,14 +24,14 @@ int main(int argc, char** argv) {
   ros::NodeHandle node;
   image_transport::ImageTransport it(node); 
   image_transport::Publisher itPublisher = it.advertise(IMAGE_TOPIC, 1);
-  cv::VideoCapture capture(0, cv::CAP_V4L2);
+  cv::VideoCapture capture(8, cv::CAP_V4L2);
 
   capture.set(cv::CAP_PROP_FRAME_WIDTH, 640);
   capture.set(cv::CAP_PROP_FRAME_HEIGHT, 360);
 
   sensor_msgs::ImagePtr msg;
 
-  // cv::namedWindow(OPENCV_WINDOW, cv::WINDOW_AUTOSIZE );
+  cv::namedWindow(OPENCV_WINDOW, cv::WINDOW_AUTOSIZE );
 
   double fps = capture.get(cv::CAP_PROP_FPS);
   // cv::Size size(
