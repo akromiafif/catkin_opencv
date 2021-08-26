@@ -110,9 +110,9 @@ namespace aksan_percept {
       }
 
       // DISABLE KALO MODE FLIGHT
-      // cv::imshow(OPENCV_WINDOW, orig_image);
-      // cv::imshow("Red Hue", hue_image);
-      // cv::imshow("Pink Hue", lower_pink);
+      cv::imshow(OPENCV_WINDOW, orig_image);
+      cv::imshow("Red Hue", hue_image);
+      cv::imshow("Pink Hue", lower_pink);
       // DISABLE KALO MODE FLIGHT
 
       writer << orig_image;
