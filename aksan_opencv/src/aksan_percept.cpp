@@ -3,7 +3,15 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <cmath>
 #include <aksan_percept.hpp>
+
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <unistd.h>
+#endif
+#include <cstdlib>
 
 using namespace std;
 using namespace cv;
@@ -22,14 +30,15 @@ namespace aksan_percept {
     // VARIABLE BUAT SIMPEN VIDEO
     cv::Size size(
       (int) 640,
-      (int) 360
+      (int) 480
     );
 
-    writer.open("vision_detected.avi", VideoWriter::fourcc('M','J','P','G'), 30, size);
+    writer.open("vision_detected.avi", VideoWriter::fourcc('M','J','P','G'), 60, size);
     // VARIABLE BUAT SIMPEN VIDEO
 
     //Image subscriber to "camera/image" topic
     itSubscriber = it.subscribe(IMAGE_TOPIC, 1, &AksanPercept::improCB, this); 
+    commandClient = node->serviceClient<mavros_msgs::CommandLong>("/mavros/cmd/command");  
   }
 
   AksanPercept::~AksanPercept() {
@@ -91,7 +100,9 @@ namespace aksan_percept {
       // ============== CUSTOM FOR PINK RANGE ============== //
 
       if (circles.size() != 0) {
+        doServoMove(8, 500);
         ROS_INFO("Red Circle Detected");
+        sleep(3);
       }
 
       // Highlight detected object
@@ -120,5 +131,32 @@ namespace aksan_percept {
       ROS_ERROR("cv_bridge exception: %s", e.what());
       return;
     }
+  }
+
+  void AksanPercept::doServoMove(int channel, int pwm) {
+    ros::Rate rate(30.0);
+
+    mavros_msgs::CommandLong::Request request;
+    mavros_msgs::CommandLong::Response response;
+
+    request.command = 183;
+    request.confirmation = 1;
+    request.param1 = channel;
+    request.param2 = pwm;
+    request.param3 = 0;
+    request.param4 = 0;
+    request.param5 = 0;
+    request.param6 = 0;
+    request.param7 = 0;
+    bool succeed = commandClient.call(request, response);
+
+    if (succeed) {
+      ROS_INFO("Payload Dropped");
+    } else {
+      ROS_INFO("Payload not Dropped");
+    }
+
+    ros::spinOnce();
+    rate.sleep();
   }
 }

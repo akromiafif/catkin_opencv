@@ -6,6 +6,8 @@
 #include <math.h>
 #include <sstream>
 
+#include <mavros_msgs/CommandLong.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -26,6 +28,7 @@ namespace aksan_percept {
   class AksanPercept {
     public: 
       image_transport::Subscriber itSubscriber;
+      ros::ServiceClient commandClient;
 
       // Save video variable
       cv::VideoWriter writer;
@@ -36,5 +39,7 @@ namespace aksan_percept {
       ~AksanPercept();
 
       void improCB(const sensor_msgs::ImageConstPtr& msg);
+      void doServoMove(int channel, int pwm);
   };
+  
 }
