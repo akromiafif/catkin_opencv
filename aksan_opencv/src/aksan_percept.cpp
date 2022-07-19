@@ -30,10 +30,10 @@ namespace aksan_percept {
     // VARIABLE BUAT SIMPEN VIDEO
     cv::Size size(
       (int) 640,
-      (int) 480
+      (int) 360
     );
 
-    writer.open("vision_detected.avi", VideoWriter::fourcc('M','J','P','G'), 60, size);
+    writer.open("vision_detected.avi", VideoWriter::fourcc('M','J','P','G'), 30, size);
     // VARIABLE BUAT SIMPEN VIDEO
 
     //Image subscriber to "camera/image" topic
@@ -100,9 +100,14 @@ namespace aksan_percept {
       // ============== CUSTOM FOR PINK RANGE ============== //
 
       if (circles.size() != 0) {
-        doServoMove(8, 500);
+        // doServoMove(8, 500);
         ROS_INFO("Red Circle Detected");
-        sleep(3);
+        // sleep(3);
+        // doServoMove(8, 1300);
+        // sleep(5);
+        // doServoMove(9, 700);
+        // sleep(3);
+        // doServoMove(9, 1600);
       }
 
       // Highlight detected object
@@ -121,9 +126,9 @@ namespace aksan_percept {
       }
 
       // DISABLE KALO MODE FLIGHT
-      cv::imshow(OPENCV_WINDOW, orig_image);
-      cv::imshow("Red Hue", hue_image);
-      cv::imshow("Pink Hue", lower_pink);
+      // cv::imshow(OPENCV_WINDOW, orig_image);
+      // cv::imshow("Red Hue", hue_image);
+      // cv::imshow("Pink Hue", lower_pink);
       // DISABLE KALO MODE FLIGHT
 
       writer << orig_image;
